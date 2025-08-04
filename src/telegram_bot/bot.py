@@ -12,6 +12,8 @@ from telegram.ext import (
 )
 
 from config import create_settings
+from config.settings import Settings
+
 from .emojis import add_random_emoji_to_text
 
 logger = logging.getLogger(__name__)
@@ -200,7 +202,7 @@ class TelegramBot:
         )
 
 
-def create_bot(settings=None) -> TelegramBot:
+def create_bot(settings: Settings | None = None) -> TelegramBot:
     """Create and configure the Telegram bot.
 
     Args:

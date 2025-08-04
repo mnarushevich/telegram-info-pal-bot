@@ -2,13 +2,13 @@
 
 import logging
 import sys
-from typing import NoReturn
 
-from .bot import create_bot
 from config import create_settings
 
+from .bot import create_bot
 
-def main() -> NoReturn:
+
+def main() -> None:
     """Main function to run the Telegram bot."""
     # Create settings instance
     settings = create_settings()

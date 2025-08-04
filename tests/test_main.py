@@ -99,7 +99,7 @@ class TestMain:
         with (
             patch("telegram_bot.main.create_settings", return_value=mock_settings),
             patch("telegram_bot.main.create_bot") as mock_create_bot,
-            patch("telegram_bot.config.Settings.setup_logging") as mock_setup_logging,
+            patch("config.Settings.setup_logging") as mock_setup_logging,
             patch("sys.exit"),
         ):
 

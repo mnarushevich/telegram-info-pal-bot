@@ -100,7 +100,7 @@ class Settings(BaseSettings):
 # Global settings instance - instantiated only when module is not being imported for testing
 def create_settings() -> Settings:
     """Create a new Settings instance."""
-    return Settings()
+    return Settings()  # type: ignore[call-arg]
 
 
 # Global settings instance (will be set in main.py or explicitly when needed)
