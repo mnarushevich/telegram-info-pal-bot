@@ -1,0 +1,80 @@
+version: "3"
+
+vars:
+  PYTHON_SRC: src
+  PYTHON_TESTS: tests
+
+tasks:
+  install:
+    desc: Install dependencies using uv
+    cmds:
+      - uv sync --all-extras
+
+  install-dev:
+    desc: Install development dependencies
+    cmds:
+      - uv sync --all-extras --dev
+
+  format:
+    desc: Format code with black and isort
+    cmds:
+      - uv run black {{.PYTHON_SRC}} {{.PYTHON_TESTS}}
+      - uv run isort {{.PYTHON_SRC}} {{.PYTHON_TESTS}}
+
+  lint:
+    desc: Run linting with ruff and mypy
+    cmds:
+      - uv run ruff check {{.PYTHON_SRC}} {{.PYTHON_TESTS}}
+      - uv run mypy {{.PYTHON_SRC}}
+
+  lint-fix:
+    desc: Run linting with auto-fix
+    cmds:
+      - uv run ruff check --fix {{.PYTHON_SRC}} {{.PYTHON_TESTS}}
+
+  test:
+    desc: Run tests with pytest
+    cmds:
+      - uv run pytest {{.PYTHON_TESTS}} -v
+
+  test-cov:
+    desc: Run tests with coverage
+    cmds:
+      - uv run pytest {{.PYTHON_TESTS}} --cov={{.PYTHON_SRC}} --cov-report=html --cov-report=term
+
+  run:
+    desc: Run the telegram bot locally
+    cmds:
+      - uv run python -m telegram_bot.main
+
+  run-dev:
+    desc: Run the bot in development mode
+    env:
+      LOG_LEVEL: DEBUG
+    cmds:
+      - uv run python -m telegram_bot.main
+
+  check:
+    desc: Run all quality checks
+    cmds:
+      - task: format
+      - task: lint
+      - task: test
+
+  clean:
+    desc: Clean up temporary files
+    cmds:
+      - rm -rf .pytest_cache
+      - rm -rf .mypy_cache
+      - rm -rf .ruff_cache
+      - rm -rf htmlcov
+      - rm -rf .coverage
+      - find . -type d -name "__pycache__" -exec rm -rf {} +
+      - find . -type f -name "*.pyc" -delete
+
+  init:
+    desc: Initialize the project
+    cmds:
+      - uv init --no-readme --no-pin-python
+      - task: install-dev
+      - echo "Project initialized! Don't forget to set up your .env file based on .env.sample"
