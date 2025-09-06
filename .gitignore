@@ -174,3 +174,4 @@ temp/
 tmp/
 htmlcov/
 .history/
+.temp/

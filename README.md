@@ -17,7 +17,7 @@ A simple Python Telegram bot that echoes messages with random emojis, built with
 
 ### Prerequisites
 
-- Python 3.12+
+- Python 3.13+
 - [UV](https://github.com/astral-sh/uv) package manager
 - [Task](https://taskfile.dev/) for task management
 - A Telegram bot token from [@BotFather](https://t.me/botfather)
