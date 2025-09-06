@@ -33,14 +33,14 @@ class TelegramBot:
         """
         self.settings = settings
         self.application = Application.builder().token(settings.telegram_bot_token).build()
-        
+
         # Initialize Gemini client only if API key is provided
         try:
             self.gemini_client = GeminiClient(settings.gemini_api_key)
         except ValueError as e:
             logger.warning("Gemini client not initialized: %s", e)
             self.gemini_client = None
-            
+
         self._setup_handlers()
 
     def _setup_handlers(self) -> None:
@@ -151,7 +151,7 @@ class TelegramBot:
             user_id = update.effective_user.id if update.effective_user else "Unknown"
             filename = f"{user_id}_{uuid.uuid4()}.png"
             success = await self._generate_image(prompt=original_text, update=update, filename=filename)
-            
+
             if success:
                 # Reply with the generated image
                 try:
@@ -161,7 +161,7 @@ class TelegramBot:
                         "Image sent to user %s",
                         update.effective_user.id if update.effective_user else "Unknown",
                     )
-                    
+
                     #TODO: Remove this after switching to S3 storage
                     # Clean up the temporary image file
                     try:
@@ -169,11 +169,11 @@ class TelegramBot:
                         logger.info("Temporary image file %s removed", filename)
                     except OSError as cleanup_error:
                         logger.warning("Failed to remove temporary file %s: %s", filename, cleanup_error)
-                        
+
                 except Exception as e:
                     logger.error("Failed to send image: %s", e)
                     await update.message.reply_text("❌ Failed to send the generated image.")
-                    
+
                     # Try to clean up the file even if sending failed
                     try:
                         os.remove(filename)
@@ -210,7 +210,7 @@ class TelegramBot:
                 update.effective_user.id if update.effective_user else "Unknown",
                 original_text,
             )
-            
+
 
     async def _generate_image(self, prompt: str, update: Update, filename: str) -> bool:
         """Generate an image using Gemini API.
@@ -219,7 +219,7 @@ class TelegramBot:
             prompt: The prompt to generate the image.
             update: Telegram update object.
             filename: The filename to save the image to.
-            
+
         Returns:
             bool: True if image generation was successful, False otherwise.
         """
@@ -230,7 +230,7 @@ class TelegramBot:
                     "❌ Image generation is not available. Gemini API key is not configured."
                 )
             return False
-        
+
         try:
             success = await self.gemini_client.generate_content(prompt, filename=filename)
             if not success:

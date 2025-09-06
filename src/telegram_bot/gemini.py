@@ -2,9 +2,9 @@
 
 import logging
 from io import BytesIO
-from PIL import Image
 
 from google import genai
+from PIL import Image
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +19,11 @@ class GeminiClient:
 
     async def generate_content(self, prompt: str, filename: str = "myimage.png") -> bool:
         """Generate content using Gemini API.
-        
+
         Args:
             prompt: The text prompt for image generation.
             filename: The filename to save the generated image.
-            
+
         Returns:
             bool: True if image generation and saving was successful, False otherwise.
         """
@@ -50,7 +50,7 @@ class GeminiClient:
             else:
                 logger.warning("No image data found in response")
                 return False
-                
+
         except Exception as e:
             logger.error("Error generating image: %s", e)
             return False
