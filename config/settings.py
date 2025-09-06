@@ -77,6 +77,10 @@ class Settings(BaseSettings):
         default=None,
         description="Path to SSL private key file",
     )
+    gemini_api_key: str | None = Field(
+        default=None,
+        description="Gemini API key",
+    )
 
     @property
     def is_development(self) -> bool:
